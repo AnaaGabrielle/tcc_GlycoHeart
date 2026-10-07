@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GlycoHeart | Monitoramento de Saúde</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         LOGIN
+    ====================================================== -->
+
+    <div id="telaLogin" class="tela-login">
+
+        <div class="login-container">
+
+            <div class="login-logo">
+                <span>💙</span>
+            </div>
+
+            <div class="login-header">
+                <h1>GlycoHeart</h1>
+
+                <p>
+                    Monitoramento inteligente de saúde
+                </p>
+            </div>
+
+            <form id="formLogin" class="login-form">
+
+                <div class="campo-login">
+                    <label for="loginEmail">E-mail</label>
+
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        placeholder="seu@email.com"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="campo-login">
+
+                    <label for="loginSenha">
+                        Senha
+                    </label>
+
+                    <div class="senha-container">
+
+                        <input
+                            type="password"
+                            id="loginSenha"
+                            placeholder="Digite sua senha"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="mostrarSenha"
+                            class="mostrar-senha"
+                            aria-label="Mostrar senha"
+                        >
+                            👁️
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="login-opcoes">
+
+                    <label class="lembrar">
+                        <input
+                            type="checkbox"
+                            id="lembrarLogin"
+                        >
+
+                        <span>
+                            Lembrar de mim
+                        </span>
+                    </label>
+
+                    <button
+                        type="button"
+                        id="esqueciSenha"
+                        class="link-button"
+                    >
+                        Esqueci minha senha
+                    </button>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn-login"
+                >
+                    Entrar
+                </button>
+
+                <div class="divisor">
+                    <span>ou</span>
+                </div>
+
+                <button
+                    type="button"
+                    id="criarContaBtn"
+                    class="btn-criar"
+                >
+                    Criar uma conta
+                </button>
+
+            </form>
+
+            <div class="login-aviso">
+                🔒 Protótipo local. Os dados deste projeto
+                ficam armazenados neste navegador.
+            </div>
+
+            <p class="login-footer">
+                GlycoHeart © 2026
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MODAL DE CADASTRO
+    ====================================================== -->
+
+    <div
+        id="modalCadastro"
+        class="modal-login"
+    >
+
+        <div class="modal-login-box">
+
+            <div class="modal-login-header">
+
+                <div class="modal-titulo">
+
+                    <span class="modal-icon">
+                        👤
+                    </span>
+
+                    <h2>
+                        Criar conta
+                    </h2>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="fecharCadastro"
+                    class="fechar-modal"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+            <form id="formCadastro">
+
+                <div class="campo-login">
+
+                    <label for="cadastroNome">
+                        Nome
+                    </label>
+
+                    <input
+                        type="text"
+                        id="cadastroNome"
+                        placeholder="Seu nome"
+                        required
+                    >
+
+                </div>
+
+                <div class="campo-login">
+
+                    <label for="cadastroEmail">
+                        E-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        id="cadastroEmail"
+                        placeholder="seu@email.com"
+                        required
+                    >
+
+                </div>
+
+                <div class="campo-login">
+
+                    <label for="cadastroSenha">
+                        Senha
+                    </label>
+
+                    <input
+                        type="password"
+                        id="cadastroSenha"
+                        placeholder="Mínimo de 6 caracteres"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+                <div class="campo-login">
+
+                    <label for="confirmarSenha">
+                        Confirmar senha
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmarSenha"
+                        placeholder="Digite a senha novamente"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn-login"
+                >
+                    Criar minha conta
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         APLICAÇÃO
+    ====================================================== -->
+
+    <div
+        id="aplicacao"
+        class="aplicacao"
+    >
+
+        <!-- =================================================
+             CABEÇALHO
+        ================================================== -->
+
+        <header class="topo">
+
+            <div class="logo-area">
+
+                <div class="logo">
+                    <span>💙</span>
+                </div>
+
+                <div class="logo-texto">
+
+                    <h1>
+                        GlycoHeart
+                    </h1>
+
+                    <p>
+                        Monitoramento de saúde
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="usuario-topo">
+
+                <div
+                    class="avatar"
+                    id="avatarUsuario"
+                >
+                    U
+                </div>
+
+                <div class="usuario-info">
+
+                    <strong id="nomeTopo">
+                        Usuário
+                    </strong>
+
+                    <span id="emailTopo">
+                        usuário@email.com
+                    </span>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="sairBtn"
+                    class="btn-sair"
+                    title="Sair da conta"
+                >
+                    🚪
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             NAVEGAÇÃO
+        ================================================== -->
+
+        <nav
+            class="nav"
+            aria-label="Navegação principal"
+        >
+
+            <button
+                type="button"
+                class="nav-btn ativo"
+                data-pagina="inicio"
+            >
+                <span>🏠</span>
+                <span>Início</span>
+            </button>
+
+            <button
+                type="button"
+                class="nav-btn"
+                data-pagina="glicemia"
+            >
+                <span>🩸</span>
+                <span>Glicemia</span>
+            </button>
+
+            <button
+                type="button"
+                class="nav-btn"
+                data-pagina="pressao"
+            >
+                <span>❤️</span>
+                <span>Pressão</span>
+            </button>
+
+            <button
+                type="button"
+                class="nav-btn"
+                data-pagina="alimentacao"
+            >
+                <span>🍎</span>
+                <span>Alimentação</span>
+            </button>
+
+            <button
+                type="button"
+                class="nav-btn"
+                data-pagina="medicamentos"
+            >
+                <span>💊</span>
+                <span>Medicamentos</span>
+            </button>
+
+            <button
+                type="button"
+                class="nav-btn"
+                data-pagina="relatorios"
+            >
+                <span>📊</span>
+                <span>Relatórios</span>
+            </button>
+
+            <button
+                type="button"
+                class="nav-btn"
+                data-pagina="perfil"
+            >
+                <span>👤</span>
+                <span>Perfil</span>
+            </button>
+
+        </nav>
+
+
+        <!-- =================================================
+             CONTEÚDO PRINCIPAL
+        ================================================== -->
+
+        <main class="conteudo">
+
+
+            <!-- =================================================
+                 INÍCIO / DASHBOARD
+            ================================================== -->
+
+            <section
+                id="inicio"
+                class="pagina ativa"
+            >
+
+                <div class="boas-vindas">
+
+                    <div class="boas-vindas-texto">
+
+                        <span class="tag">
+                            PAINEL PRINCIPAL
+                        </span>
+
+                        <h2 id="tituloBoasVindas">
+                            Bem-vindo ao GlycoHeart 👋
+                        </h2>
+
+                        <p>
+                            Acompanhe seus registros de saúde
+                            em um só lugar.
+                        </p>
+
+                    </div>
+
+                    <div class="data-atual">
+
+                        <span>
+                            Hoje
+                        </span>
+
+                        <strong id="dataAtual">
+                            --
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CARDS DE RESUMO -->
+
+                <div class="cards">
+
+                    <!-- GLICEMIA -->
+
+                    <article class="card card-glicemia">
+
+                        <div class="card-topo">
+
+                            <div class="icone-card">
+                                🩸
+                            </div>
+
+                            <div>
+                                <span class="card-label">
+                                    Glicemia
+                                </span>
+
+                                <small>
+                                    Última medição
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="valor"
+                            id="glicemiaAtual"
+                        >
+                            --
+                        </div>
+
+                        <p>
+                            mg/dL
+                        </p>
+
+                    </article>
+
+
+                    <!-- PRESSÃO -->
+
+                    <article class="card card-pressao">
+
+                        <div class="card-topo">
+
+                            <div class="icone-card">
+                                ❤️
+                            </div>
+
+                            <div>
+                                <span class="card-label">
+                                    Pressão
+                                </span>
+
+                                <small>
+                                    Última medição
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="valor"
+                            id="pressaoAtual"
+                        >
+                            --
+                        </div>
+
+                        <p>
+                            mmHg
+                        </p>
+
+                    </article>
+
+
+                    <!-- REFEIÇÕES -->
+
+                    <article class="card card-refeicao">
+
+                        <div class="card-topo">
+
+                            <div class="icone-card">
+                                🍎
+                            </div>
+
+                            <div>
+                                <span class="card-label">
+                                    Refeições
+                                </span>
+
+                                <small>
+                                    Registros
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="valor"
+                            id="totalRefeicoes"
+                        >
+                            0
+                        </div>
+
+                        <p>
+                            registradas
+                        </p>
+
+                    </article>
+
+
+                    <!-- MEDICAMENTOS -->
+
+                    <article class="card card-medicamento">
+
+                        <div class="card-topo">
+
+                            <div class="icone-card">
+                                💊
+                            </div>
+
+                            <div>
+                                <span class="card-label">
+                                    Medicamentos
+                                </span>
+
+                                <small>
+                                    Cadastrados
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="valor"
+                            id="totalMedicamentos"
+                        >
+                            0
+                        </div>
+
+                        <p>
+                            cadastrados
+                        </p>
+
+                    </article>
+
+                </div>
+
+
+                <!-- DASHBOARD -->
+
+                <div class="inicio-grid">
+
+
+                    <!-- ÚLTIMOS REGISTROS -->
+
+                    <section class="painel">
+
+                        <div class="painel-titulo">
+
+                            <div>
+
+                                <h3>
+                                    Últimos registros
+                                </h3>
+
+                                <p>
+                                    Acompanhe suas últimas
+                                    atividades
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div id="ultimosRegistros">
+
+                            <div class="vazio">
+                                Nenhum registro realizado ainda.
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- AÇÕES RÁPIDAS -->
+
+                    <section class="painel">
+
+                        <div class="painel-titulo">
+
+                            <div>
+
+                                <h3>
+                                    Ações rápidas
+                                </h3>
+
+                                <p>
+                                    Registre uma nova informação
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="painel-acoes">
+
+                            <button
+                                type="button"
+                                class="acao-rapida"
+                                data-pagina="glicemia"
+                            >
+                                <span>🩸</span>
+
+                                <div>
+                                    <strong>
+                                        Registrar glicemia
+                                    </strong>
+
+                                    <small>
+                                        Nova medição
+                                    </small>
+                                </div>
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="acao-rapida"
+                                data-pagina="pressao"
+                            >
+                                <span>❤️</span>
+
+                                <div>
+                                    <strong>
+                                        Registrar pressão
+                                    </strong>
+
+                                    <small>
+                                        Pressão e frequência
+                                    </small>
+                                </div>
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="acao-rapida"
+                                data-pagina="alimentacao"
+                            >
+                                <span>🍎</span>
+
+                                <div>
+                                    <strong>
+                                        Registrar alimentação
+                                    </strong>
+
+                                    <small>
+                                        Adicione uma refeição
+                                    </small>
+                                </div>
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="acao-rapida"
+                                data-pagina="medicamentos"
+                            >
+                                <span>💊</span>
+
+                                <div>
+                                    <strong>
+                                        Cadastrar medicamento
+                                    </strong>
+
+                                    <small>
+                                        Adicione um medicamento
+                                    </small>
+                                </div>
+                            </button>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 GLICEMIA
+            ================================================== -->
+
+            <section
+                id="glicemia"
+                class="pagina"
+            >
+
+                <div class="pagina-cabecalho">
+
+                    <span class="tag">
+                        MONITORAMENTO
+                    </span>
+
+                    <h2>
+                        🩸 Glicemia
+                    </h2>
+
+                    <p>
+                        Registre e acompanhe suas medições
+                        de glicemia.
+                    </p>
+
+                </div>
+
+
+                <div class="formulario">
+
+                    <div class="formulario-header">
+
+                        <div>
+                            <h3>
+                                Nova medição
+                            </h3>
+
+                            <p>
+                                Informe os dados da sua medição.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <form id="formGlicemia">
+
+                        <div class="form-grid">
+
+                            <div class="campo">
+
+                                <label for="valorGlicemia">
+                                    Valor da glicemia
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="valorGlicemia"
+                                    min="1"
+                                    max="1000"
+                                    placeholder="Ex.: 100"
+                                    required
+                                >
+
+                                <small>
+                                    Unidade: mg/dL
+                                </small>
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label for="momentoGlicemia">
+                                    Momento da medição
+                                </label>
+
+                                <select
+                                    id="momentoGlicemia"
+                                >
+
+                                    <option value="Jejum">
+                                        Jejum
+                                    </option>
+
+                                    <option value="Antes da refeição">
+                                        Antes da refeição
+                                    </option>
+
+                                    <option value="Depois da refeição">
+                                        Depois da refeição
+                                    </option>
+
+                                    <option value="Antes de dormir">
+                                        Antes de dormir
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn"
+                        >
+                            🩸 Registrar glicemia
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <div class="lista-painel">
+
+                    <div class="lista-cabecalho">
+
+                        <div>
+
+                            <h3>
+                                Histórico de glicemia
+                            </h3>
+
+                            <p>
+                                Consulte suas medições anteriores.
+                            </p>
+
+                        </div>
+
+                        <span
+                            id="contadorGlicemia"
+                            class="contador"
+                        >
+                            0 registros
+                        </span>
+
+                    </div>
+
+                    <div id="listaGlicemia">
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PRESSÃO
+            ================================================== -->
+
+            <section
+                id="pressao"
+                class="pagina"
+            >
+
+                <div class="pagina-cabecalho">
+
+                    <span class="tag">
+                        MONITORAMENTO
+                    </span>
+
+                    <h2>
+                        ❤️ Pressão arterial
+                    </h2>
+
+                    <p>
+                        Registre sua pressão e frequência cardíaca.
+                    </p>
+
+                </div>
+
+
+                <div class="formulario">
+
+                    <div class="formulario-header">
+
+                        <div>
+
+                            <h3>
+                                Nova medição
+                            </h3>
+
+                            <p>
+                                Informe os dados da medição.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <form id="formPressao">
+
+                        <div class="form-grid tres">
+
+                            <div class="campo">
+
+                                <label for="sistolica">
+                                    Sistólica
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="sistolica"
+                                    min="1"
+                                    max="300"
+                                    placeholder="Ex.: 120"
+                                    required
+                                >
+
+                                <small>
+                                    mmHg
+                                </small>
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label for="diastolica">
+                                    Diastólica
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="diastolica"
+                                    min="1"
+                                    max="200"
+                                    placeholder="Ex.: 80"
+                                    required
+                                >
+
+                                <small>
+                                    mmHg
+                                </small>
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label for="frequencia">
+                                    Frequência cardíaca
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="frequencia"
+                                    min="1"
+                                    max="250"
+                                    placeholder="Ex.: 75"
+                                    required
+                                >
+
+                                <small>
+                                    bpm
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn"
+                        >
+                            ❤️ Registrar medição
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <div class="lista-painel">
+
+                    <div class="lista-cabecalho">
+
+                        <div>
+
+                            <h3>
+                                Histórico de pressão
+                            </h3>
+
+                            <p>
+                                Consulte suas medições anteriores.
+                            </p>
+
+                        </div>
+
+                        <span
+                            id="contadorPressao"
+                            class="contador"
+                        >
+                            0 registros
+                        </span>
+
+                    </div>
+
+                    <div id="listaPressao">
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ALIMENTAÇÃO
+            ================================================== -->
+
+            <section
+                id="alimentacao"
+                class="pagina"
+            >
+
+                <div class="pagina-cabecalho">
+
+                    <span class="tag">
+                        ALIMENTAÇÃO
+                    </span>
+
+                    <h2>
+                        🍎 Alimentação
+                    </h2>
+
+                    <p>
+                        Registre suas refeições e acompanhe
+                        sua alimentação.
+                    </p>
+
+                </div>
+
+
+                <div class="formulario">
+
+                    <h3>
+                        Nova refeição
+                    </h3>
+
+                    <form id="formAlimentacao">
+
+                        <div class="form-grid">
+
+                            <div class="campo">
+
+                                <label for="tipoRefeicao">
+                                    Tipo de refeição
+                                </label>
+
+                                <select id="tipoRefeicao">
+
+                                    <option value="Café da manhã">
+                                        Café da manhã
+                                    </option>
+
+                                    <option value="Almoço">
+                                        Almoço
+                                    </option>
+
+                                    <option value="Lanche">
+                                        Lanche
+                                    </option>
+
+                                    <option value="Jantar">
+                                        Jantar
+                                    </option>
+
+                                    <option value="Ceia">
+                                        Ceia
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label for="alimentos">
+                                    Alimentos
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="alimentos"
+                                    placeholder="Ex.: arroz, feijão e salada"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn"
+                        >
+                            🍎 Registrar refeição
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <div class="lista-painel">
+
+                    <div class="lista-cabecalho">
+
+                        <h3>
+                            Histórico de alimentação
+                        </h3>
+
+                        <span
+                            id="contadorAlimentacao"
+                            class="contador"
+                        >
+                            0 registros
+                        </span>
+
+                    </div>
+
+                    <div id="listaAlimentacao">
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 MEDICAMENTOS
+            ================================================== -->
+
+            <section
+                id="medicamentos"
+                class="pagina"
+            >
+
+                <div class="pagina-cabecalho">
+
+                    <span class="tag">
+                        MEDICAMENTOS
+                    </span>
+
+                    <h2>
+                        💊 Medicamentos
+                    </h2>
+
+                    <p>
+                        Cadastre e acompanhe seus medicamentos.
+                    </p>
+
+                </div>
+
+
+                <div class="formulario">
+
+                    <h3>
+                        Novo medicamento
+                    </h3>
+
+                    <form id="formMedicamento">
+
+                        <div class="form-grid">
+
+                            <div class="campo">
+
+                                <label for="nomeMedicamento">
+                                    Nome do medicamento
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="nomeMedicamento"
+                                    placeholder="Ex.: Medicamento"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label for="horarioMedicamento">
+                                    Horário
+                                </label>
+
+                                <input
+                                    type="time"
+                                    id="horarioMedicamento"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn"
+                        >
+                            💊 Cadastrar medicamento
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <div class="lista-painel">
+
+                    <div class="lista-cabecalho">
+
+                        <h3>
+                            Medicamentos cadastrados
+                        </h3>
+
+                        <span
+                            id="contadorMedicamentos"
+                            class="contador"
+                        >
+                            0 registros
+                        </span>
+
+                    </div>
+
+                    <div id="listaMedicamentos">
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 RELATÓRIOS
+            ================================================== -->
+
+            <section
+                id="relatorios"
+                class="pagina"
+            >
+
+                <div class="pagina-cabecalho">
+
+                    <span class="tag">
+                        ACOMPANHAMENTO
+                    </span>
+
+                    <h2>
+                        📊 Relatórios
+                    </h2>
+
+                    <p>
+                        Visualize um resumo das informações
+                        registradas.
+                    </p>
+
+                </div>
+
+
+                <div class="cards relatorio-cards">
+
+                    <article class="card">
+
+                        <div class="icone-card">
+                            🩸
+                        </div>
+
+                        <h3>
+                            Glicemia
+                        </h3>
+
+                        <div
+                            class="valor"
+                            id="relGlicemia"
+                        >
+                            --
+                        </div>
+
+                    </article>
+
+
+                    <article class="card">
+
+                        <div class="icone-card">
+                            ❤️
+                        </div>
+
+                        <h3>
+                            Pressão
+                        </h3>
+
+                        <div
+                            class="valor"
+                            id="relPressao"
+                        >
+                            --
+                        </div>
+
+                    </article>
+
+
+                    <article class="card">
+
+                        <div class="icone-card">
+                            🍎
+                        </div>
+
+                        <h3>
+                            Refeições
+                        </h3>
+
+                        <div
+                            class="valor"
+                            id="relRefeicoes"
+                        >
+                            0
+                        </div>
+
+                    </article>
+
+
+                    <article class="card">
+
+                        <div class="icone-card">
+                            💊
+                        </div>
+
+                        <h3>
+                            Medicamentos
+                        </h3>
+
+                        <div
+                            class="valor"
+                            id="relMedicamentos"
+                        >
+                            0
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <div class="painel">
+
+                    <div class="painel-titulo">
+
+                        <div>
+
+                            <h3>
+                                Resumo dos registros
+                            </h3>
+
+                            <p>
+                                Informações gerais do seu acompanhamento.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        id="resumoRelatorio"
+                        class="resumo-lista"
+                    >
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PERFIL
+            ================================================== -->
+
+            <section
+                id="perfil"
+                class="pagina"
+            >
+
+                <div class="pagina-cabecalho">
+
+                    <span class="tag">
+                        MINHA CONTA
+                    </span>
+
+                    <h2>
+                        👤 Perfil
+                    </h2>
+
+                    <p>
+                        Consulte e atualize seus dados.
+                    </p>
+
+                </div>
+
+
+                <div class="formulario">
+
+                    <h3>
+                        Informações pessoais
+                    </h3>
+
+                    <form id="formPerfil">
+
+                        <div class="form-grid">
+
+                            <div class="campo">
+
+                                <label for="nomeUsuario">
+                                    Nome
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="nomeUsuario"
+                                    placeholder="Seu nome"
+                                >
+
+                            </div>
+
+
+                            <div class="campo">
+
+                                <label for="emailUsuario">
+                                    E-mail
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="emailUsuario"
+                                    placeholder="seu@email.com"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-grid">
+
+                            <div class="campo">
+
+                                <label for="nascimentoUsuario">
+                                    Data de nascimento
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="nascimentoUsuario"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn"
+                        >
+                            💾 Salvar alterações
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- =================================================
+             AVISO
+        ================================================== -->
+
+        <div class="conteudo">
+
+            <div class="aviso">
+
+                <span>
+                    ⚠️
+                </span>
+
+                <div>
+
+                    <strong>
+                        Importante
+                    </strong>
+
+                    <p>
+                        O GlycoHeart é um projeto de apoio ao
+                        monitoramento de informações de saúde.
+                        Os dados registrados não substituem
+                        avaliação, diagnóstico ou orientação
+                        de profissionais de saúde.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+
+        <footer>
+
+            <strong>
+                GlycoHeart © 2026
+            </strong>
+
+            <span>
+                Sistema de apoio ao monitoramento de saúde
+            </span>
+
+        </footer>
+
+    </div>
+
+
+    <!-- =====================================================
+         NOTIFICAÇÃO
+    ====================================================== -->
+
+    <div
+        id="notificacao"
+        class="notificacao"
+    >
+
+        <span>
+            ✓
+        </span>
+
+        <p id="textoNotificacao">
+            Operação realizada com sucesso.
+        </p>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
