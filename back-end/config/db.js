@@ -20,7 +20,8 @@ pool.getConnection()
     conn.release();
   })
   .catch(err => {
-    console.error('❌ Erro ao conectar ao banco de dados:', err.message);
-  });
+  console.error('❌ Erro ao conectar ao banco de dados:');
+  console.error(err);
+});
 
 module.exports = pool;

@@ -1,1597 +1,961 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlycoHeart | Monitoramento</title>
 
-    <title>GlycoHeart | Monitoramento de Saúde</title>
+    <!-- Proteção de acesso -->
+    <script>
+        if (localStorage.getItem("glycoheartLogado") !== "true") {
+            window.location.replace("./login.html");
+        }
+    </script>
 
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        .analise-grid-gh {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .corpo-card-gh {
+            padding: 24px;
+        }
+
+        .corpo-visual-gh {
+            position: relative;
+            min-height: 310px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #eff6ff, #f5f3ff);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .silhueta-gh {
+            font-size: 145px;
+        }
+
+        .ponto-gh {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 12px;
+            border-radius: 14px;
+            background: white;
+            box-shadow: 0 5px 20px #1e293b20;
+            font-size: 20px;
+        }
+
+        .ponto-gh small {
+            font-size: 12px;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        .ponto-coracao-gh {
+            top: 27%;
+            right: 7%;
+        }
+
+        .ponto-sangue-gh {
+            bottom: 22%;
+            left: 5%;
+        }
+
+        .texto-educativo-gh {
+            line-height: 1.7;
+            color: #64748b;
+            margin-top: 18px;
+        }
+
+        .indicadores-gh {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .efeito-gh {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        .icone-efeito-gh {
+            font-size: 28px;
+        }
+
+        .efeito-gh h3 {
+            margin: 0 0 8px;
+        }
+
+        .efeito-gh p {
+            margin: 0;
+            line-height: 1.65;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .dicas-gh {
+            margin-top: 20px;
+            padding: 24px;
+        }
+
+        .dicas-gh li {
+            margin: 10px 0;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .dicas-gh .btn {
+            margin-top: 10px;
+        }
+
+        /* Lista dinâmica de consequências */
+        .lista-consequencias-gh {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .consequencia-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 22px;
+            background: var(--card-bg, #ffffff);
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+        }
+
+        .consequencia-icone {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 52px;
+            height: 52px;
+            background: #eef2ff;
+            border-radius: 15px;
+            font-size: 27px;
+        }
+
+        .consequencia-card h3 {
+            margin: 2px 0 8px;
+        }
+
+        .consequencia-card p,
+        .consequencia-vazia p {
+            margin: 0;
+            color: #64748b;
+            line-height: 1.65;
+            font-size: 14px;
+        }
+
+        .consequencia-vazia {
+            padding: 32px 20px;
+            text-align: center;
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 18px;
+        }
+
+        .consequencia-vazia > span {
+            font-size: 40px;
+        }
+
+        .consequencia-vazia h3 {
+            margin: 12px 0 8px;
+        }
+
+        .consequencia-aviso {
+            margin-top: 18px;
+            padding: 18px;
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 14px;
+            color: #9a3412;
+            line-height: 1.6;
+        }
+
+        .consequencia-aviso p {
+            margin: 8px 0 0;
+            font-size: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .analise-grid-gh {
+                grid-template-columns: 1fr;
+            }
+
+            .corpo-visual-gh {
+                min-height: 260px;
+            }
+
+            .silhueta-gh {
+                font-size: 120px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .consequencia-card {
+                padding: 16px;
+                gap: 12px;
+            }
+
+            .consequencia-icone {
+                width: 42px;
+                height: 42px;
+                font-size: 23px;
+            }
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 
-    <!-- =====================================================
-         LOGIN
-    ====================================================== -->
+<div class="app">
 
-    <div id="telaLogin" class="tela-login">
+    <aside class="sidebar">
 
-        <div class="login-container">
-
-            <div class="login-logo">
-                <span>💙</span>
-            </div>
-
-            <div class="login-header">
+        <div class="logo">
+            <div class="logo-icon">💙</div>
+            <div>
                 <h1>GlycoHeart</h1>
+                <span>Health Monitor</span>
+            </div>
+        </div>
 
-                <p>
-                    Monitoramento inteligente de saúde
-                </p>
+        <nav class="menu">
+
+            <button class="menu-btn ativo" data-page="inicio">
+                🏠 <span>Dashboard</span>
+            </button>
+
+            <button class="menu-btn" data-page="glicemia">
+                🩸 <span>Glicemia</span>
+            </button>
+
+            <button class="menu-btn" data-page="pressao">
+                ❤️ <span>Pressão</span>
+            </button>
+
+            <button class="menu-btn" data-page="alimentacao">
+                🍎 <span>Alimentação</span>
+            </button>
+
+            <button class="menu-btn" data-page="analise">
+                🧬 <span>Análise educativa</span>
+            </button>
+
+            <button class="menu-btn" data-page="consequencias">
+                💜 <span>Consequências</span>
+            </button>
+
+            <button class="menu-btn" data-page="medicamentos">
+                💊 <span>Medicamentos</span>
+            </button>
+
+            <button class="menu-btn" data-page="relatorios">
+                📊 <span>Relatórios</span>
+            </button>
+
+            <button class="menu-btn" data-page="perfil">
+                👤 <span>Meu perfil</span>
+            </button>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <button id="temaBtn" class="side-action">
+                🌙 <span>Modo escuro</span>
+            </button>
+
+            <button id="exportarBtn" class="side-action">
+                📥 <span>Exportar dados</span>
+            </button>
+
+            <button id="limparBtn" class="side-action perigo">
+                🗑️ <span>Limpar dados</span>
+            </button>
+
+        </div>
+    </aside>
+
+    <main class="conteudo">
+
+        <header class="topbar">
+            <div>
+                <span class="saudacao">Olá 👋</span>
+                <h2 id="nomeDashboard">Bem-vindo ao GlycoHeart</h2>
             </div>
 
-            <form id="formLogin" class="login-form">
+            <div class="status">
+                <span class="status-dot"></span>
+                Sistema online
+            </div>
+        </header>
 
-                <div class="campo-login">
-                    <label for="loginEmail">E-mail</label>
+        <!-- DASHBOARD -->
+        <section id="inicio" class="pagina ativa">
 
-                    <input
-                        type="email"
-                        id="loginEmail"
-                        placeholder="seu@email.com"
-                        autocomplete="email"
-                        required
-                    >
+            <div class="titulo-pagina">
+                <span class="tag">VISÃO GERAL</span>
+                <h1>Seu painel de saúde</h1>
+                <p>Acompanhe seus registros em um único lugar.</p>
+            </div>
+
+            <div class="cards">
+
+                <div class="card indicador glicemia-card">
+                    <div class="card-top">
+                        <div class="icone">🩸</div>
+                        <span>Glicemia</span>
+                    </div>
+                    <div class="card-valor" id="glicemiaAtual">--</div>
+                    <small>Última medição</small>
                 </div>
 
-                <div class="campo-login">
+                <div class="card indicador pressao-card">
+                    <div class="card-top">
+                        <div class="icone">❤️</div>
+                        <span>Pressão</span>
+                    </div>
+                    <div class="card-valor" id="pressaoAtual">--</div>
+                    <small>Última medição</small>
+                </div>
 
-                    <label for="loginSenha">
-                        Senha
-                    </label>
+                <div class="card indicador">
+                    <div class="card-top">
+                        <div class="icone">🍎</div>
+                        <span>Refeições</span>
+                    </div>
+                    <div class="card-valor" id="totalRefeicoes">0</div>
+                    <small>Registradas</small>
+                </div>
 
-                    <div class="senha-container">
+                <div class="card indicador">
+                    <div class="card-top">
+                        <div class="icone">💊</div>
+                        <span>Medicamentos</span>
+                    </div>
+                    <div class="card-valor" id="totalMedicamentos">0</div>
+                    <small>Cadastrados</small>
+                </div>
 
-                        <input
-                            type="password"
-                            id="loginSenha"
-                            placeholder="Digite sua senha"
-                            autocomplete="current-password"
-                            required
-                        >
+            </div>
 
-                        <button
-                            type="button"
-                            id="mostrarSenha"
-                            class="mostrar-senha"
-                            aria-label="Mostrar senha"
-                        >
-                            👁️
-                        </button>
+            <div class="dashboard-grid">
 
+                <div class="card grafico-card">
+                    <div class="card-header">
+                        <div>
+                            <h3>Histórico de glicemia</h3>
+                            <p>Últimas medições registradas</p>
+                        </div>
+                    </div>
+                    <canvas id="graficoGlicemia"></canvas>
+                </div>
+
+                <div class="card grafico-card">
+                    <div class="card-header">
+                        <div>
+                            <h3>Pressão arterial</h3>
+                            <p>Histórico das medições</p>
+                        </div>
+                    </div>
+                    <canvas id="graficoPressao"></canvas>
+                </div>
+
+            </div>
+
+            <div class="card atividade-card">
+                <div class="card-header">
+                    <div>
+                        <h3>Atividade recente</h3>
+                        <p>Últimos registros do sistema</p>
                     </div>
                 </div>
 
-                <div class="login-opcoes">
+                <div id="atividadeRecente" class="atividade-lista">
+                    <p class="vazio">Nenhuma atividade registrada.</p>
+                </div>
+            </div>
 
-                    <label class="lembrar">
-                        <input
-                            type="checkbox"
-                            id="lembrarLogin"
-                        >
+            <div class="aviso">
+                <strong>⚠️ Aviso importante</strong>
+                <p>
+                    O GlycoHeart é um protótipo para registro e acompanhamento
+                    de informações. Ele não realiza diagnóstico médico e não
+                    substitui profissionais de saúde.
+                </p>
+            </div>
 
-                        <span>
-                            Lembrar de mim
+        </section>
+
+        <!-- GLICEMIA -->
+        <section id="glicemia" class="pagina">
+
+            <div class="titulo-pagina">
+                <span class="tag">GLICEMIA</span>
+                <h1>Registro de glicemia</h1>
+                <p>Registre suas medições para acompanhar seu histórico.</p>
+            </div>
+
+            <div class="form-layout">
+
+                <div class="card formulario">
+                    <h3>Nova medição</h3>
+
+                    <form id="formGlicemia">
+
+                        <div class="campo">
+                            <label for="valorGlicemia">Glicemia (mg/dL)</label>
+                            <input type="number" id="valorGlicemia"
+                                min="1" placeholder="Ex.: 100" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="momentoGlicemia">Momento</label>
+                            <select id="momentoGlicemia">
+                                <option value="Jejum">Jejum</option>
+                                <option value="Antes da refeição">Antes da refeição</option>
+                                <option value="Depois da refeição">Depois da refeição</option>
+                                <option value="Antes de dormir">Antes de dormir</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+
+                        <div class="campo">
+                            <label for="observacaoGlicemia">Observação</label>
+                            <textarea id="observacaoGlicemia"
+                                placeholder="Opcional"></textarea>
+                        </div>
+
+                        <button class="btn" type="submit">
+                            + Registrar glicemia
+                        </button>
+
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3>Histórico</h3>
+                            <p>Suas medições recentes</p>
+                        </div>
+                    </div>
+                    <div id="listaGlicemia"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PRESSÃO -->
+        <section id="pressao" class="pagina">
+
+            <div class="titulo-pagina">
+                <span class="tag">PRESSÃO</span>
+                <h1>Pressão arterial</h1>
+                <p>Registre pressão e frequência cardíaca.</p>
+            </div>
+
+            <div class="form-layout">
+
+                <div class="card formulario">
+                    <h3>Nova medição</h3>
+
+                    <form id="formPressao">
+
+                        <div class="campo">
+                            <label for="sistolica">Sistólica (mmHg)</label>
+                            <input type="number" id="sistolica"
+                                min="1" placeholder="Ex.: 120" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="diastolica">Diastólica (mmHg)</label>
+                            <input type="number" id="diastolica"
+                                min="1" placeholder="Ex.: 80" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="frequencia">Frequência cardíaca (bpm)</label>
+                            <input type="number" id="frequencia"
+                                min="1" placeholder="Ex.: 75" required>
+                        </div>
+
+                        <button class="btn" type="submit">
+                            + Registrar pressão
+                        </button>
+
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3>Histórico</h3>
+                            <p>Últimas medições</p>
+                        </div>
+                    </div>
+                    <div id="listaPressao"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ALIMENTAÇÃO -->
+        <section id="alimentacao" class="pagina">
+
+            <div class="titulo-pagina">
+                <span class="tag">ALIMENTAÇÃO</span>
+                <h1>Registro alimentar</h1>
+                <p>Registre suas refeições e alimentos consumidos.</p>
+            </div>
+
+            <div class="form-layout">
+
+                <div class="card formulario">
+                    <h3>Nova refeição</h3>
+
+                    <form id="formAlimentacao">
+
+                        <div class="campo">
+                            <label for="tipoRefeicao">Tipo de refeição</label>
+                            <select id="tipoRefeicao">
+                                <option>Café da manhã</option>
+                                <option>Almoço</option>
+                                <option>Lanche</option>
+                                <option>Jantar</option>
+                                <option>Ceia</option>
+                            </select>
+                        </div>
+
+                        <div class="campo">
+                            <label for="alimentos">Alimentos</label>
+                            <textarea id="alimentos"
+                                placeholder="Ex.: arroz, feijão e frango"
+                                required></textarea>
+                        </div>
+
+                        <button class="btn" type="submit">
+                            + Registrar refeição
+                        </button>
+
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3>Histórico alimentar</h3>
+                            <p>Refeições registradas</p>
+                        </div>
+                    </div>
+                    <div id="listaAlimentacao"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ANÁLISE EDUCATIVA -->
+        <section id="analise" class="pagina">
+
+            <div class="titulo-pagina">
+                <span class="tag">ANÁLISE EDUCATIVA</span>
+                <h1>Entenda seu corpo</h1>
+                <p>
+                    Veja como alimentação, glicemia e saúde cardiovascular
+                    se relacionam.
+                </p>
+            </div>
+
+            <div class="analise-grid-gh">
+
+                <div class="card corpo-card-gh">
+
+                    <div class="corpo-visual-gh">
+                        <div class="silhueta-gh">🧍</div>
+
+                        <span class="ponto-gh ponto-coracao-gh">
+                            ❤️ <small>Coração</small>
                         </span>
-                    </label>
 
-                    <button
-                        type="button"
-                        id="esqueciSenha"
-                        class="link-button"
-                    >
-                        Esqueci minha senha
+                        <span class="ponto-gh ponto-sangue-gh">
+                            🩸 <small>Glicose no sangue</small>
+                        </span>
+                    </div>
+
+                    <p class="texto-educativo-gh">
+                        O corpo usa a glicose como fonte de energia. A insulina
+                        ajuda a glicose a entrar nas células. O coração e os
+                        vasos sanguíneos também precisam de cuidados diários.
+                    </p>
+
+                </div>
+
+                <div class="indicadores-gh">
+
+                    <article class="card efeito-gh">
+                        <span class="icone-efeito-gh">🩸</span>
+                        <div>
+                            <h3>Glicemia</h3>
+                            <p>
+                                Acompanhar as medições ao longo do tempo ajuda
+                                a perceber padrões e conversar com um
+                                profissional de saúde.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="card efeito-gh">
+                        <span class="icone-efeito-gh">❤️</span>
+                        <div>
+                            <h3>Saúde cardiovascular</h3>
+                            <p>
+                                Pressão arterial, atividade física, alimentação
+                                e acompanhamento clínico fazem parte do cuidado
+                                com o coração.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="card efeito-gh">
+                        <span class="icone-efeito-gh">🥗</span>
+                        <div>
+                            <h3>Alimentação</h3>
+                            <p>
+                                A composição e a quantidade das refeições podem
+                                influenciar a glicemia. A resposta varia de
+                                pessoa para pessoa.
+                            </p>
+                        </div>
+                    </article>
+
+                    <button class="btn" type="button" data-page="consequencias">
+                        Ver consequências educativas →
                     </button>
 
                 </div>
-
-                <button
-                    type="submit"
-                    class="btn-login"
-                >
-                    Entrar
-                </button>
-
-                <div class="divisor">
-                    <span>ou</span>
-                </div>
-
-                <button
-                    type="button"
-                    id="criarContaBtn"
-                    class="btn-criar"
-                >
-                    Criar uma conta
-                </button>
-
-            </form>
-
-            <div class="login-aviso">
-                🔒 Protótipo local. Os dados deste projeto
-                ficam armazenados neste navegador.
             </div>
 
-            <p class="login-footer">
-                GlycoHeart © 2026
+            <div class="aviso">
+                <strong>⚠️ Informação importante</strong>
+                <p>
+                    Esta tela é educativa e não prevê resultados individuais
+                    nem substitui orientação médica. Não altere medicamentos
+                    com base neste conteúdo.
+                </p>
+            </div>
+
+        </section>
+
+        <!-- CONSEQUÊNCIAS -->
+      <!-- CONSEQUÊNCIAS -->
+<section id="consequencias" class="pagina">
+
+    <div class="titulo-pagina">
+        <span class="tag">CONSEQUÊNCIAS EDUCATIVAS</span>
+
+        <h1>Como sua alimentação pode influenciar sua saúde</h1>
+
+        <p>
+            Veja informações educativas sobre os alimentos
+            da sua última refeição registrada.
+        </p>
+    </div>
+
+    <div class="consequencias-resumo-grid">
+
+        <!-- ÚLTIMA REFEIÇÃO -->
+        <div class="card dicas-gh resumo-refeicao-gh">
+
+            <div class="resumo-titulo-gh">
+
+                <span class="resumo-icone-gh">🍽️</span>
+
+                <div>
+                    <h3>Sua última refeição</h3>
+
+                    <p id="resumoConsequencias">
+                        Registre uma refeição na página Alimentação
+                        para visualizar informações sobre os alimentos.
+                    </p>
+                </div>
+
+            </div>
+
+            <button class="btn" type="button"
+                    data-page="alimentacao">
+                + Registrar refeição
+            </button>
+
+        </div>
+
+        <!-- EXPLICAÇÃO -->
+        <div class="card dicas-gh resumo-explicacao-gh">
+
+            <div class="resumo-titulo-gh">
+
+                <span class="resumo-icone-gh">🔎</span>
+
+                <div>
+                    <h3>O que os alimentos podem indicar?</h3>
+
+                    <p>
+                        Informações educativas relacionadas aos
+                        alimentos registrados, organizadas por
+                        possíveis efeitos na saúde.
+                    </p>
+                </div>
+
+            </div>
+
+            <span class="resumo-legenda-gh">
+                Análise informativa • Não é diagnóstico
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- INFORMAÇÕES DINÂMICAS -->
+    <div id="listaConsequencias"
+         class="lista-consequencias-gh">
+
+        <div class="consequencia-vazia">
+
+            <span>🥗</span>
+
+            <h3>Nenhuma refeição analisada</h3>
+
+            <p>
+                Quando você registrar uma refeição,
+                as informações educativas aparecerão aqui.
             </p>
 
         </div>
 
     </div>
 
-
-    <!-- =====================================================
-         MODAL DE CADASTRO
-    ====================================================== -->
-
-    <div
-        id="modalCadastro"
-        class="modal-login"
-    >
-
-        <div class="modal-login-box">
-
-            <div class="modal-login-header">
-
-                <div class="modal-titulo">
-
-                    <span class="modal-icon">
-                        👤
-                    </span>
-
-                    <h2>
-                        Criar conta
-                    </h2>
-
-                </div>
-
-                <button
-                    type="button"
-                    id="fecharCadastro"
-                    class="fechar-modal"
-                >
-                    ✕
-                </button>
-
-            </div>
-
-            <form id="formCadastro">
-
-                <div class="campo-login">
-
-                    <label for="cadastroNome">
-                        Nome
-                    </label>
-
-                    <input
-                        type="text"
-                        id="cadastroNome"
-                        placeholder="Seu nome"
-                        required
-                    >
-
-                </div>
-
-                <div class="campo-login">
-
-                    <label for="cadastroEmail">
-                        E-mail
-                    </label>
-
-                    <input
-                        type="email"
-                        id="cadastroEmail"
-                        placeholder="seu@email.com"
-                        required
-                    >
-
-                </div>
-
-                <div class="campo-login">
-
-                    <label for="cadastroSenha">
-                        Senha
-                    </label>
-
-                    <input
-                        type="password"
-                        id="cadastroSenha"
-                        placeholder="Mínimo de 6 caracteres"
-                        minlength="6"
-                        required
-                    >
-
-                </div>
-
-                <div class="campo-login">
-
-                    <label for="confirmarSenha">
-                        Confirmar senha
-                    </label>
-
-                    <input
-                        type="password"
-                        id="confirmarSenha"
-                        placeholder="Digite a senha novamente"
-                        minlength="6"
-                        required
-                    >
-
-                </div>
-
-                <button
-                    type="submit"
-                    class="btn-login"
-                >
-                    Criar minha conta
-                </button>
-
-            </form>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         APLICAÇÃO
-    ====================================================== -->
-
-    <div
-        id="aplicacao"
-        class="aplicacao"
-    >
-
-        <!-- =================================================
-             CABEÇALHO
-        ================================================== -->
-
-        <header class="topo">
-
-            <div class="logo-area">
-
-                <div class="logo">
-                    <span>💙</span>
-                </div>
-
-                <div class="logo-texto">
-
-                    <h1>
-                        GlycoHeart
-                    </h1>
-
-                    <p>
-                        Monitoramento de saúde
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="usuario-topo">
-
-                <div
-                    class="avatar"
-                    id="avatarUsuario"
-                >
-                    U
-                </div>
-
-                <div class="usuario-info">
-
-                    <strong id="nomeTopo">
-                        Usuário
-                    </strong>
-
-                    <span id="emailTopo">
-                        usuário@email.com
-                    </span>
-
-                </div>
-
-                <button
-                    type="button"
-                    id="sairBtn"
-                    class="btn-sair"
-                    title="Sair da conta"
-                >
-                    🚪
-                </button>
-
-            </div>
-
-        </header>
-
-
-        <!-- =================================================
-             NAVEGAÇÃO
-        ================================================== -->
-
-        <nav
-            class="nav"
-            aria-label="Navegação principal"
-        >
-
-            <button
-                type="button"
-                class="nav-btn ativo"
-                data-pagina="inicio"
-            >
-                <span>🏠</span>
-                <span>Início</span>
-            </button>
-
-            <button
-                type="button"
-                class="nav-btn"
-                data-pagina="glicemia"
-            >
-                <span>🩸</span>
-                <span>Glicemia</span>
-            </button>
-
-            <button
-                type="button"
-                class="nav-btn"
-                data-pagina="pressao"
-            >
-                <span>❤️</span>
-                <span>Pressão</span>
-            </button>
-
-            <button
-                type="button"
-                class="nav-btn"
-                data-pagina="alimentacao"
-            >
-                <span>🍎</span>
-                <span>Alimentação</span>
-            </button>
-
-            <button
-                type="button"
-                class="nav-btn"
-                data-pagina="medicamentos"
-            >
-                <span>💊</span>
-                <span>Medicamentos</span>
-            </button>
-
-            <button
-                type="button"
-                class="nav-btn"
-                data-pagina="relatorios"
-            >
-                <span>📊</span>
-                <span>Relatórios</span>
-            </button>
-
-            <button
-                type="button"
-                class="nav-btn"
-                data-pagina="perfil"
-            >
-                <span>👤</span>
-                <span>Perfil</span>
-            </button>
-
-        </nav>
-
-
-        <!-- =================================================
-             CONTEÚDO PRINCIPAL
-        ================================================== -->
-
-        <main class="conteudo">
-
-
-            <!-- =================================================
-                 INÍCIO / DASHBOARD
-            ================================================== -->
-
-            <section
-                id="inicio"
-                class="pagina ativa"
-            >
-
-                <div class="boas-vindas">
-
-                    <div class="boas-vindas-texto">
-
-                        <span class="tag">
-                            PAINEL PRINCIPAL
-                        </span>
-
-                        <h2 id="tituloBoasVindas">
-                            Bem-vindo ao GlycoHeart 👋
-                        </h2>
-
-                        <p>
-                            Acompanhe seus registros de saúde
-                            em um só lugar.
-                        </p>
-
-                    </div>
-
-                    <div class="data-atual">
-
-                        <span>
-                            Hoje
-                        </span>
-
-                        <strong id="dataAtual">
-                            --
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <!-- CARDS DE RESUMO -->
-
-                <div class="cards">
-
-                    <!-- GLICEMIA -->
-
-                    <article class="card card-glicemia">
-
-                        <div class="card-topo">
-
-                            <div class="icone-card">
-                                🩸
-                            </div>
-
-                            <div>
-                                <span class="card-label">
-                                    Glicemia
-                                </span>
-
-                                <small>
-                                    Última medição
-                                </small>
-                            </div>
-
-                        </div>
-
-                        <div
-                            class="valor"
-                            id="glicemiaAtual"
-                        >
-                            --
-                        </div>
-
-                        <p>
-                            mg/dL
-                        </p>
-
-                    </article>
-
-
-                    <!-- PRESSÃO -->
-
-                    <article class="card card-pressao">
-
-                        <div class="card-topo">
-
-                            <div class="icone-card">
-                                ❤️
-                            </div>
-
-                            <div>
-                                <span class="card-label">
-                                    Pressão
-                                </span>
-
-                                <small>
-                                    Última medição
-                                </small>
-                            </div>
-
-                        </div>
-
-                        <div
-                            class="valor"
-                            id="pressaoAtual"
-                        >
-                            --
-                        </div>
-
-                        <p>
-                            mmHg
-                        </p>
-
-                    </article>
-
-
-                    <!-- REFEIÇÕES -->
-
-                    <article class="card card-refeicao">
-
-                        <div class="card-topo">
-
-                            <div class="icone-card">
-                                🍎
-                            </div>
-
-                            <div>
-                                <span class="card-label">
-                                    Refeições
-                                </span>
-
-                                <small>
-                                    Registros
-                                </small>
-                            </div>
-
-                        </div>
-
-                        <div
-                            class="valor"
-                            id="totalRefeicoes"
-                        >
-                            0
-                        </div>
-
-                        <p>
-                            registradas
-                        </p>
-
-                    </article>
-
-
-                    <!-- MEDICAMENTOS -->
-
-                    <article class="card card-medicamento">
-
-                        <div class="card-topo">
-
-                            <div class="icone-card">
-                                💊
-                            </div>
-
-                            <div>
-                                <span class="card-label">
-                                    Medicamentos
-                                </span>
-
-                                <small>
-                                    Cadastrados
-                                </small>
-                            </div>
-
-                        </div>
-
-                        <div
-                            class="valor"
-                            id="totalMedicamentos"
-                        >
-                            0
-                        </div>
-
-                        <p>
-                            cadastrados
-                        </p>
-
-                    </article>
-
-                </div>
-
-
-                <!-- DASHBOARD -->
-
-                <div class="inicio-grid">
-
-
-                    <!-- ÚLTIMOS REGISTROS -->
-
-                    <section class="painel">
-
-                        <div class="painel-titulo">
-
-                            <div>
-
-                                <h3>
-                                    Últimos registros
-                                </h3>
-
-                                <p>
-                                    Acompanhe suas últimas
-                                    atividades
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                        <div id="ultimosRegistros">
-
-                            <div class="vazio">
-                                Nenhum registro realizado ainda.
-                            </div>
-
-                        </div>
-
-                    </section>
-
-
-                    <!-- AÇÕES RÁPIDAS -->
-
-                    <section class="painel">
-
-                        <div class="painel-titulo">
-
-                            <div>
-
-                                <h3>
-                                    Ações rápidas
-                                </h3>
-
-                                <p>
-                                    Registre uma nova informação
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="painel-acoes">
-
-                            <button
-                                type="button"
-                                class="acao-rapida"
-                                data-pagina="glicemia"
-                            >
-                                <span>🩸</span>
-
-                                <div>
-                                    <strong>
-                                        Registrar glicemia
-                                    </strong>
-
-                                    <small>
-                                        Nova medição
-                                    </small>
-                                </div>
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="acao-rapida"
-                                data-pagina="pressao"
-                            >
-                                <span>❤️</span>
-
-                                <div>
-                                    <strong>
-                                        Registrar pressão
-                                    </strong>
-
-                                    <small>
-                                        Pressão e frequência
-                                    </small>
-                                </div>
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="acao-rapida"
-                                data-pagina="alimentacao"
-                            >
-                                <span>🍎</span>
-
-                                <div>
-                                    <strong>
-                                        Registrar alimentação
-                                    </strong>
-
-                                    <small>
-                                        Adicione uma refeição
-                                    </small>
-                                </div>
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="acao-rapida"
-                                data-pagina="medicamentos"
-                            >
-                                <span>💊</span>
-
-                                <div>
-                                    <strong>
-                                        Cadastrar medicamento
-                                    </strong>
-
-                                    <small>
-                                        Adicione um medicamento
-                                    </small>
-                                </div>
-                            </button>
-
-                        </div>
-
-                    </section>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 GLICEMIA
-            ================================================== -->
-
-            <section
-                id="glicemia"
-                class="pagina"
-            >
-
-                <div class="pagina-cabecalho">
-
-                    <span class="tag">
-                        MONITORAMENTO
-                    </span>
-
-                    <h2>
-                        🩸 Glicemia
-                    </h2>
-
-                    <p>
-                        Registre e acompanhe suas medições
-                        de glicemia.
-                    </p>
-
-                </div>
-
-
-                <div class="formulario">
-
-                    <div class="formulario-header">
-
-                        <div>
-                            <h3>
-                                Nova medição
-                            </h3>
-
-                            <p>
-                                Informe os dados da sua medição.
-                            </p>
-                        </div>
-
-                    </div>
-
-
-                    <form id="formGlicemia">
-
-                        <div class="form-grid">
-
-                            <div class="campo">
-
-                                <label for="valorGlicemia">
-                                    Valor da glicemia
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="valorGlicemia"
-                                    min="1"
-                                    max="1000"
-                                    placeholder="Ex.: 100"
-                                    required
-                                >
-
-                                <small>
-                                    Unidade: mg/dL
-                                </small>
-
-                            </div>
-
-
-                            <div class="campo">
-
-                                <label for="momentoGlicemia">
-                                    Momento da medição
-                                </label>
-
-                                <select
-                                    id="momentoGlicemia"
-                                >
-
-                                    <option value="Jejum">
-                                        Jejum
-                                    </option>
-
-                                    <option value="Antes da refeição">
-                                        Antes da refeição
-                                    </option>
-
-                                    <option value="Depois da refeição">
-                                        Depois da refeição
-                                    </option>
-
-                                    <option value="Antes de dormir">
-                                        Antes de dormir
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-                        </div>
-
-
-                        <button
-                            type="submit"
-                            class="btn"
-                        >
-                            🩸 Registrar glicemia
-                        </button>
-
-                    </form>
-
-                </div>
-
-
-                <div class="lista-painel">
-
-                    <div class="lista-cabecalho">
-
-                        <div>
-
-                            <h3>
-                                Histórico de glicemia
-                            </h3>
-
-                            <p>
-                                Consulte suas medições anteriores.
-                            </p>
-
-                        </div>
-
-                        <span
-                            id="contadorGlicemia"
-                            class="contador"
-                        >
-                            0 registros
-                        </span>
-
-                    </div>
-
-                    <div id="listaGlicemia">
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 PRESSÃO
-            ================================================== -->
-
-            <section
-                id="pressao"
-                class="pagina"
-            >
-
-                <div class="pagina-cabecalho">
-
-                    <span class="tag">
-                        MONITORAMENTO
-                    </span>
-
-                    <h2>
-                        ❤️ Pressão arterial
-                    </h2>
-
-                    <p>
-                        Registre sua pressão e frequência cardíaca.
-                    </p>
-
-                </div>
-
-
-                <div class="formulario">
-
-                    <div class="formulario-header">
-
-                        <div>
-
-                            <h3>
-                                Nova medição
-                            </h3>
-
-                            <p>
-                                Informe os dados da medição.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <form id="formPressao">
-
-                        <div class="form-grid tres">
-
-                            <div class="campo">
-
-                                <label for="sistolica">
-                                    Sistólica
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="sistolica"
-                                    min="1"
-                                    max="300"
-                                    placeholder="Ex.: 120"
-                                    required
-                                >
-
-                                <small>
-                                    mmHg
-                                </small>
-
-                            </div>
-
-
-                            <div class="campo">
-
-                                <label for="diastolica">
-                                    Diastólica
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="diastolica"
-                                    min="1"
-                                    max="200"
-                                    placeholder="Ex.: 80"
-                                    required
-                                >
-
-                                <small>
-                                    mmHg
-                                </small>
-
-                            </div>
-
-
-                            <div class="campo">
-
-                                <label for="frequencia">
-                                    Frequência cardíaca
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="frequencia"
-                                    min="1"
-                                    max="250"
-                                    placeholder="Ex.: 75"
-                                    required
-                                >
-
-                                <small>
-                                    bpm
-                                </small>
-
-                            </div>
-
-                        </div>
-
-
-                        <button
-                            type="submit"
-                            class="btn"
-                        >
-                            ❤️ Registrar medição
-                        </button>
-
-                    </form>
-
-                </div>
-
-
-                <div class="lista-painel">
-
-                    <div class="lista-cabecalho">
-
-                        <div>
-
-                            <h3>
-                                Histórico de pressão
-                            </h3>
-
-                            <p>
-                                Consulte suas medições anteriores.
-                            </p>
-
-                        </div>
-
-                        <span
-                            id="contadorPressao"
-                            class="contador"
-                        >
-                            0 registros
-                        </span>
-
-                    </div>
-
-                    <div id="listaPressao">
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 ALIMENTAÇÃO
-            ================================================== -->
-
-            <section
-                id="alimentacao"
-                class="pagina"
-            >
-
-                <div class="pagina-cabecalho">
-
-                    <span class="tag">
-                        ALIMENTAÇÃO
-                    </span>
-
-                    <h2>
-                        🍎 Alimentação
-                    </h2>
-
-                    <p>
-                        Registre suas refeições e acompanhe
-                        sua alimentação.
-                    </p>
-
-                </div>
-
-
-                <div class="formulario">
-
-                    <h3>
-                        Nova refeição
-                    </h3>
-
-                    <form id="formAlimentacao">
-
-                        <div class="form-grid">
-
-                            <div class="campo">
-
-                                <label for="tipoRefeicao">
-                                    Tipo de refeição
-                                </label>
-
-                                <select id="tipoRefeicao">
-
-                                    <option value="Café da manhã">
-                                        Café da manhã
-                                    </option>
-
-                                    <option value="Almoço">
-                                        Almoço
-                                    </option>
-
-                                    <option value="Lanche">
-                                        Lanche
-                                    </option>
-
-                                    <option value="Jantar">
-                                        Jantar
-                                    </option>
-
-                                    <option value="Ceia">
-                                        Ceia
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-
-                            <div class="campo">
-
-                                <label for="alimentos">
-                                    Alimentos
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="alimentos"
-                                    placeholder="Ex.: arroz, feijão e salada"
-                                    required
-                                >
-
-                            </div>
-
-                        </div>
-
-
-                        <button
-                            type="submit"
-                            class="btn"
-                        >
-                            🍎 Registrar refeição
-                        </button>
-
-                    </form>
-
-                </div>
-
-
-                <div class="lista-painel">
-
-                    <div class="lista-cabecalho">
-
-                        <h3>
-                            Histórico de alimentação
-                        </h3>
-
-                        <span
-                            id="contadorAlimentacao"
-                            class="contador"
-                        >
-                            0 registros
-                        </span>
-
-                    </div>
-
-                    <div id="listaAlimentacao">
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 MEDICAMENTOS
-            ================================================== -->
-
-            <section
-                id="medicamentos"
-                class="pagina"
-            >
-
-                <div class="pagina-cabecalho">
-
-                    <span class="tag">
-                        MEDICAMENTOS
-                    </span>
-
-                    <h2>
-                        💊 Medicamentos
-                    </h2>
-
-                    <p>
-                        Cadastre e acompanhe seus medicamentos.
-                    </p>
-
-                </div>
-
-
-                <div class="formulario">
-
-                    <h3>
-                        Novo medicamento
-                    </h3>
-
-                    <form id="formMedicamento">
-
-                        <div class="form-grid">
-
-                            <div class="campo">
-
-                                <label for="nomeMedicamento">
-                                    Nome do medicamento
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="nomeMedicamento"
-                                    placeholder="Ex.: Medicamento"
-                                    required
-                                >
-
-                            </div>
-
-
-                            <div class="campo">
-
-                                <label for="horarioMedicamento">
-                                    Horário
-                                </label>
-
-                                <input
-                                    type="time"
-                                    id="horarioMedicamento"
-                                    required
-                                >
-
-                            </div>
-
-                        </div>
-
-
-                        <button
-                            type="submit"
-                            class="btn"
-                        >
-                            💊 Cadastrar medicamento
-                        </button>
-
-                    </form>
-
-                </div>
-
-
-                <div class="lista-painel">
-
-                    <div class="lista-cabecalho">
-
-                        <h3>
-                            Medicamentos cadastrados
-                        </h3>
-
-                        <span
-                            id="contadorMedicamentos"
-                            class="contador"
-                        >
-                            0 registros
-                        </span>
-
-                    </div>
-
-                    <div id="listaMedicamentos">
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 RELATÓRIOS
-            ================================================== -->
-
-            <section
-                id="relatorios"
-                class="pagina"
-            >
-
-                <div class="pagina-cabecalho">
-
-                    <span class="tag">
-                        ACOMPANHAMENTO
-                    </span>
-
-                    <h2>
-                        📊 Relatórios
-                    </h2>
-
-                    <p>
-                        Visualize um resumo das informações
-                        registradas.
-                    </p>
-
-                </div>
-
-
-                <div class="cards relatorio-cards">
-
-                    <article class="card">
-
-                        <div class="icone-card">
-                            🩸
-                        </div>
-
-                        <h3>
-                            Glicemia
-                        </h3>
-
-                        <div
-                            class="valor"
-                            id="relGlicemia"
-                        >
-                            --
-                        </div>
-
-                    </article>
-
-
-                    <article class="card">
-
-                        <div class="icone-card">
-                            ❤️
-                        </div>
-
-                        <h3>
-                            Pressão
-                        </h3>
-
-                        <div
-                            class="valor"
-                            id="relPressao"
-                        >
-                            --
-                        </div>
-
-                    </article>
-
-
-                    <article class="card">
-
-                        <div class="icone-card">
-                            🍎
-                        </div>
-
-                        <h3>
-                            Refeições
-                        </h3>
-
-                        <div
-                            class="valor"
-                            id="relRefeicoes"
-                        >
-                            0
-                        </div>
-
-                    </article>
-
-
-                    <article class="card">
-
-                        <div class="icone-card">
-                            💊
-                        </div>
-
-                        <h3>
-                            Medicamentos
-                        </h3>
-
-                        <div
-                            class="valor"
-                            id="relMedicamentos"
-                        >
-                            0
-                        </div>
-
-                    </article>
-
-                </div>
-
-
-                <div class="painel">
-
-                    <div class="painel-titulo">
-
-                        <div>
-
-                            <h3>
-                                Resumo dos registros
-                            </h3>
-
-                            <p>
-                                Informações gerais do seu acompanhamento.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <div
-                        id="resumoRelatorio"
-                        class="resumo-lista"
-                    >
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 PERFIL
-            ================================================== -->
-
-            <section
-                id="perfil"
-                class="pagina"
-            >
-
-                <div class="pagina-cabecalho">
-
-                    <span class="tag">
-                        MINHA CONTA
-                    </span>
-
-                    <h2>
-                        👤 Perfil
-                    </h2>
-
-                    <p>
-                        Consulte e atualize seus dados.
-                    </p>
-
-                </div>
-
-
-                <div class="formulario">
-
-                    <h3>
-                        Informações pessoais
-                    </h3>
-
-                    <form id="formPerfil">
-
-                        <div class="form-grid">
-
-                            <div class="campo">
-
-                                <label for="nomeUsuario">
-                                    Nome
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="nomeUsuario"
-                                    placeholder="Seu nome"
-                                >
-
-                            </div>
-
-
-                            <div class="campo">
-
-                                <label for="emailUsuario">
-                                    E-mail
-                                </label>
-
-                                <input
-                                    type="email"
-                                    id="emailUsuario"
-                                    placeholder="seu@email.com"
-                                >
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="form-grid">
-
-                            <div class="campo">
-
-                                <label for="nascimentoUsuario">
-                                    Data de nascimento
-                                </label>
-
-                                <input
-                                    type="date"
-                                    id="nascimentoUsuario"
-                                >
-
-                            </div>
-
-                        </div>
-
-
-                        <button
-                            type="submit"
-                            class="btn"
-                        >
-                            💾 Salvar alterações
-                        </button>
-
-                    </form>
-
-                </div>
-
-            </section>
-
-        </main>
-
-
-        <!-- =================================================
-             AVISO
-        ================================================== -->
-
-        <div class="conteudo">
-
-            <div class="aviso">
-
-                <span>
-                    ⚠️
-                </span>
-
-                <div>
-
-                    <strong>
-                        Importante
-                    </strong>
-
-                    <p>
-                        O GlycoHeart é um projeto de apoio ao
-                        monitoramento de informações de saúde.
-                        Os dados registrados não substituem
-                        avaliação, diagnóstico ou orientação
-                        de profissionais de saúde.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================================
-             FOOTER
-        ================================================== -->
-
-        <footer>
-
-            <strong>
-                GlycoHeart © 2026
-            </strong>
-
-            <span>
-                Sistema de apoio ao monitoramento de saúde
-            </span>
-
-        </footer>
-
-    </div>
-
-
-    <!-- =====================================================
-         NOTIFICAÇÃO
-    ====================================================== -->
-
-    <div
-        id="notificacao"
-        class="notificacao"
-    >
-
-        <span>
-            ✓
-        </span>
-
-        <p id="textoNotificacao">
-            Operação realizada com sucesso.
+    <!-- AVISO -->
+    <div class="aviso">
+
+        <strong>⚠️ Importante</strong>
+
+        <p>
+            Esta tela não mede a glicemia, não prevê resultados
+            clínicos e não substitui uma avaliação profissional.
+            As informações não devem ser utilizadas para alterar
+            medicamentos ou tratamentos.
         </p>
 
     </div>
 
+</section>
 
-    <script src="script.js"></script>
+        <!-- MEDICAMENTOS -->
+        <section id="medicamentos" class="pagina">
+
+            <div class="titulo-pagina">
+                <span class="tag">MEDICAMENTOS</span>
+                <h1>Meus medicamentos</h1>
+                <p>Organize os medicamentos e seus horários.</p>
+            </div>
+
+            <div class="form-layout">
+
+                <div class="card formulario">
+                    <h3>Novo medicamento</h3>
+
+                    <form id="formMedicamento">
+
+                        <div class="campo">
+                            <label for="nomeMedicamento">Nome</label>
+                            <input type="text" id="nomeMedicamento"
+                                placeholder="Nome do medicamento" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="horarioMedicamento">Horário</label>
+                            <input type="time" id="horarioMedicamento" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="doseMedicamento">Observação</label>
+                            <input type="text" id="doseMedicamento"
+                                placeholder="Ex.: conforme orientação">
+                        </div>
+
+                        <button class="btn" type="submit">
+                            + Cadastrar medicamento
+                        </button>
+
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3>Medicamentos cadastrados</h3>
+                            <p>Organizados por horário</p>
+                        </div>
+                    </div>
+                    <div id="listaMedicamentos"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- RELATÓRIOS -->
+        <section id="relatorios" class="pagina">
+
+            <div class="titulo-pagina">
+                <span class="tag">RELATÓRIOS</span>
+                <h1>Resumo dos registros</h1>
+                <p>Visualize a quantidade de informações cadastradas.</p>
+            </div>
+
+            <div class="cards">
+
+                <div class="card indicador">
+                    <div class="icone">🩸</div>
+                    <span>Glicemias</span>
+                    <div class="card-valor" id="relGlicemia">0</div>
+                </div>
+
+                <div class="card indicador">
+                    <div class="icone">❤️</div>
+                    <span>Pressões</span>
+                    <div class="card-valor" id="relPressao">0</div>
+                </div>
+
+                <div class="card indicador">
+                    <div class="icone">🍎</div>
+                    <span>Refeições</span>
+                    <div class="card-valor" id="relRefeicoes">0</div>
+                </div>
+
+                <div class="card indicador">
+                    <div class="icone">💊</div>
+                    <span>Medicamentos</span>
+                    <div class="card-valor" id="relMedicamentos">0</div>
+                </div>
+
+            </div>
+
+            <div class="dashboard-grid">
+
+                <div class="card grafico-card">
+                    <h3>Glicemia</h3>
+                    <canvas id="graficoGlicemiaRelatorio"></canvas>
+                </div>
+
+                <div class="card grafico-card">
+                    <h3>Pressão</h3>
+                    <canvas id="graficoPressaoRelatorio"></canvas>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PERFIL -->
+        <section id="perfil" class="pagina">
+
+            <div class="titulo-pagina">
+                <span class="tag">PERFIL</span>
+                <h1>Meu perfil</h1>
+                <p>Gerencie suas informações pessoais.</p>
+            </div>
+
+            <div class="card formulario perfil-form">
+
+                <div class="perfil-avatar">👤</div>
+
+                <form id="formPerfil">
+
+                    <div class="campo">
+                        <label for="nomeUsuario">Nome</label>
+                        <input type="text" id="nomeUsuario"
+                            placeholder="Seu nome" required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="emailUsuario">E-mail</label>
+                        <input type="email" id="emailUsuario"
+                            placeholder="seu@email.com">
+                    </div>
+
+                    <div class="campo">
+                        <label for="nascimentoUsuario">Data de nascimento</label>
+                        <input type="date" id="nascimentoUsuario">
+                    </div>
+
+                    <button class="btn" type="submit">
+                        Salvar perfil
+                    </button>
+
+                </form>
+            </div>
+        </section>
+
+        <footer>
+            GlycoHeart © 2026 — Protótipo de monitoramento
+        </footer>
+
+    </main>
+</div>
+
+<div id="notificacao" class="notificacao">
+    <span id="notificacaoIcone">✓</span>
+    <span id="notificacaoTexto">Registro salvo.</span>
+</div>
+
+<script src="app.js"></script>
+
+<script>
+    // Navegação entre as telas
+    document.querySelectorAll("[data-page]").forEach(function(botao) {
+        botao.addEventListener("click", function() {
+            const destino = botao.dataset.page;
+            const paginaDestino = document.getElementById(destino);
+
+            if (!paginaDestino) return;
+
+            document.querySelectorAll(".pagina").forEach(function(pagina) {
+                pagina.classList.remove("ativa");
+            });
+
+            paginaDestino.classList.add("ativa");
+
+            document.querySelectorAll(".menu-btn").forEach(function(item) {
+                item.classList.remove("ativo");
+            });
+
+            const botaoMenu = document.querySelector(
+                '.menu-btn[data-page="' + destino + '"]'
+            );
+
+            if (botaoMenu) {
+                botaoMenu.classList.add("ativo");
+            }
+        });
+    });
+</script>
 
 </body>
-
 </html>

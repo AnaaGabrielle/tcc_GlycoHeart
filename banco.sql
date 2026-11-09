@@ -3,3 +3,5 @@
     usuario VARCHAR(50) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL
 );
+
+
