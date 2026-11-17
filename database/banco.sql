@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS glicemias (
     usuario_id INT NOT NULL,
     valor INT NOT NULL,                       -- mg/dL
     momento VARCHAR(30) NOT NULL,             -- Jejum, Antes da refeição, ...
+    observacao TEXT NULL,                      -- Observação opcional do registro
     data_registro DATE NOT NULL,
     horario_registro TIME NOT NULL,
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -74,9 +75,56 @@ CREATE TABLE IF NOT EXISTS medicamentos (
     usuario_id INT NOT NULL,
     nome VARCHAR(100) NOT NULL,
     horario TIME NOT NULL,                    -- horário em que deve tomar
+    observacao TEXT NULL,                      -- Dose/instruções adicionais
     data_registro DATE NOT NULL,              -- quando foi cadastrado
     horario_registro TIME NOT NULL,
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     INDEX idx_medicamentos_usuario_data (usuario_id, data_registro)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- ============================================
+-- Atualizações incrementais (bancos já existentes)
+-- ============================================
+-- As tabelas acima são criadas com os campos novos.
+-- Este bloco também adiciona os campos caso o banco já
+-- tenha sido criado anteriormente, sem apagar dados.
+
+DROP PROCEDURE IF EXISTS atualizar_estrutura_glycoheart;
+
+DELIMITER $$
+
+CREATE PROCEDURE atualizar_estrutura_glycoheart()
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = 'glicemias'
+          AND COLUMN_NAME = 'observacao'
+    ) THEN
+        ALTER TABLE glicemias
+            ADD COLUMN observacao TEXT NULL
+            AFTER momento;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = 'medicamentos'
+          AND COLUMN_NAME = 'observacao'
+    ) THEN
+        ALTER TABLE medicamentos
+            ADD COLUMN observacao TEXT NULL
+            AFTER horario;
+    END IF;
+END$$
+
+DELIMITER ;
+
+CALL atualizar_estrutura_glycoheart();
+
+DROP PROCEDURE IF EXISTS atualizar_estrutura_glycoheart;
+
