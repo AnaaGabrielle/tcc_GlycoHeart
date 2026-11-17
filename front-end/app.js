@@ -338,6 +338,154 @@ function excluirRegistro(tipo, id) {
 }
 
 
+
+/* =====================================
+   SISTEMA DE CONQUISTAS GLYCOHEART
+===================================== */
+
+function atualizarConquistas() {
+
+    const total =
+        dados.glicemias.length +
+        dados.pressoes.length +
+        dados.alimentacoes.length +
+        dados.medicamentos.length;
+
+    const categorias = [
+        dados.glicemias.length,
+        dados.pressoes.length,
+        dados.alimentacoes.length,
+        dados.medicamentos.length
+    ].filter(valor => valor > 0).length;
+
+    const xp = total * 20;
+    const nivel = Math.floor(xp / 100) + 1;
+    const xpAtual = xp % 100;
+
+    const nomesNiveis = [
+        "Explorador da Saúde",
+        "Aprendiz do Autocuidado",
+        "Guardião da Saúde",
+        "Especialista em Organização",
+        "Mestre do GlycoHeart"
+    ];
+
+    const medalhas = [
+        {
+            nome: "Primeiro Passo",
+            descricao: "Realize seu primeiro registro.",
+            icone: "🌟",
+            desbloqueada: total >= 1
+        },
+        {
+            nome: "Rotina em Construção",
+            descricao: "Complete cinco registros.",
+            icone: "📋",
+            desbloqueada: total >= 5
+        },
+        {
+            nome: "Explorador",
+            descricao: "Utilize três categorias diferentes.",
+            icone: "🧭",
+            desbloqueada: categorias >= 3
+        },
+        {
+            nome: "Colecionador",
+            descricao: "Complete dez registros.",
+            icone: "🏆",
+            desbloqueada: total >= 10
+        }
+    ];
+
+    const missoes = [
+        {
+            nome: "Primeiro registro",
+            descricao: "Registre uma informação no sistema.",
+            icone: "📝",
+            atual: Math.min(total, 1),
+            meta: 1
+        },
+        {
+            nome: "Organização",
+            descricao: "Realize cinco registros.",
+            icone: "📚",
+            atual: Math.min(total, 5),
+            meta: 5
+        },
+        {
+            nome: "Explore o sistema",
+            descricao: "Utilize três categorias diferentes.",
+            icone: "🧭",
+            atual: Math.min(categorias, 3),
+            meta: 3
+        }
+    ];
+
+    const elemento = id => document.getElementById(id);
+
+    if (!elemento("nivelNumeroGH")) return;
+
+    elemento("nivelNumeroGH").textContent = `Nível ${nivel}`;
+
+    elemento("nivelNomeGH").textContent =
+        nomesNiveis[Math.min(nivel - 1, nomesNiveis.length - 1)];
+
+    elemento("totalXPGH").textContent = xp;
+
+    elemento("totalMedalhasGH").textContent =
+        medalhas.filter(m => m.desbloqueada).length;
+
+    elemento("totalRegistrosGH").textContent = total;
+
+    elemento("barraXP").style.width = `${xpAtual}%`;
+
+    elemento("textoXP").textContent =
+        `${xpAtual} / 100 XP para o próximo nível`;
+
+    elemento("listaMissoesGH").innerHTML =
+        missoes.map(m => {
+            const porcentagem = (m.atual / m.meta) * 100;
+            const concluida = m.atual >= m.meta;
+
+            return `
+                <div class="missao-gh">
+                    <div class="missao-icone-gh">${m.icone}</div>
+                    <h3>${m.nome}</h3>
+                    <p>${m.descricao}</p>
+
+                    <div class="missao-barra-gh">
+                        <div style="width:${porcentagem}%"></div>
+                    </div>
+
+                    <div class="missao-status-gh">
+                        <span>${m.atual}/${m.meta}</span>
+                        <strong>${concluida ? "✓ Concluída" : "Em andamento"}</strong>
+                    </div>
+                </div>
+            `;
+        }).join("");
+
+    elemento("listaMedalhasGH").innerHTML =
+        medalhas.map(m => `
+            <div class="medalha-gh ${
+                m.desbloqueada ? "desbloqueada" : "bloqueada"
+            }">
+
+                <div class="medalha-icone-gh">
+                    ${m.desbloqueada ? m.icone : "🔒"}
+                </div>
+
+                <h3>${m.nome}</h3>
+                <p>${m.descricao}</p>
+
+                <span class="medalha-etiqueta-gh">
+                    ${m.desbloqueada ? "✓ Desbloqueada" : "Bloqueada"}
+                </span>
+
+            </div>
+        `).join("");
+}
+
 /* =========================================================
    ATUALIZAÇÃO GERAL
 ========================================================= */
@@ -353,6 +501,7 @@ function atualizarTela() {
     atualizarAtividade();
     atualizarGraficos();
     atualizarConsequencias();
+    atualizarConquistas();
 }
 
 

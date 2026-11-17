@@ -1,0 +1,280 @@
+/* =====================================
+   GLYCOHEART - CONQUISTAS
+===================================== */
+
+.conquistas-gh {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.hero-conquistas-gh {
+    background: linear-gradient(120deg, #082f49, #075985, #0891b2);
+    color: white;
+    padding: 32px;
+    border-radius: 22px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-conquistas-gh h2 {
+    font-size: 28px;
+    margin: 10px 0;
+}
+
+.hero-conquistas-gh p {
+    color: #dbeafe;
+    line-height: 1.6;
+}
+
+.hero-conquistas-gh .estrela-gh {
+    font-size: 48px;
+}
+
+.nivel-gh {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 22px;
+    align-items: center;
+}
+
+.nivel-icone-gh {
+    width: 100px;
+    height: 100px;
+    border-radius: 25px;
+    background: #ffffff20;
+    border: 2px solid #ffffff50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+}
+
+.nivel-info-gh h3 {
+    margin: 0 0 8px;
+}
+
+.nivel-info-gh strong {
+    color: #a5f3fc;
+}
+
+.xp-barra-gh {
+    width: 100%;
+    height: 13px;
+    border-radius: 20px;
+    background: #ffffff35;
+    overflow: hidden;
+    margin: 14px 0 8px;
+}
+
+.xp-progresso-gh {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #67e8f9, #a5f3fc);
+    border-radius: 20px;
+    transition: width .7s ease;
+}
+
+.xp-texto-gh {
+    font-size: 13px;
+    color: #e0f2fe;
+}
+
+.resumo-xp-gh {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.xp-card-gh {
+    padding: 22px;
+    border-radius: 18px;
+    background: var(--card-bg, white);
+    border: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.xp-card-gh span {
+    font-size: 30px;
+}
+
+.xp-card-gh h3 {
+    font-size: 25px;
+    margin: 10px 0 5px;
+}
+
+.xp-card-gh p {
+    color: #64748b;
+    font-size: 13px;
+    margin: 0;
+}
+
+.titulo-conquistas-gh {
+    margin-bottom: 16px;
+}
+
+.titulo-conquistas-gh h2 {
+    margin-bottom: 6px;
+}
+
+.titulo-conquistas-gh p {
+    color: #64748b;
+}
+
+.missoes-grid-gh,
+.medalhas-grid-gh {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.missao-gh,
+.medalha-gh {
+    background: var(--card-bg, white);
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 22px;
+    transition: .25s ease;
+}
+
+.missao-gh:hover,
+.medalha-gh:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px #0f172a12;
+}
+
+.missao-icone-gh,
+.medalha-icone-gh {
+    width: 55px;
+    height: 55px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e0f2fe;
+    font-size: 28px;
+    margin-bottom: 14px;
+}
+
+.missao-gh h3,
+.medalha-gh h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+}
+
+.missao-gh p,
+.medalha-gh p {
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 14px;
+}
+
+.missao-barra-gh {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.missao-barra-gh div {
+    height: 100%;
+    background: linear-gradient(90deg, #0891b2, #22d3ee);
+    border-radius: 20px;
+    transition: width .5s;
+}
+
+.missao-status-gh {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 9px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.medalha-gh {
+    text-align: center;
+}
+
+.medalha-gh .medalha-icone-gh {
+    margin: 0 auto 14px;
+    width: 72px;
+    height: 72px;
+    font-size: 38px;
+    border-radius: 50%;
+}
+
+.medalha-gh.desbloqueada {
+    border-color: #67e8f9;
+    background: linear-gradient(145deg, var(--card-bg, white), #ecfeff);
+}
+
+.medalha-gh.bloqueada {
+    opacity: .55;
+    filter: grayscale(1);
+}
+
+.medalha-etiqueta-gh {
+    display: inline-block;
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    background: #e0f2fe;
+    color: #075985;
+}
+
+body.dark .xp-card-gh,
+body.dark .missao-gh,
+body.dark .medalha-gh {
+    background: var(--card-bg, #1e293b);
+    border-color: #334155;
+}
+
+body.dark .medalha-gh.desbloqueada {
+    background: linear-gradient(145deg, #1e293b, #164e63);
+}
+
+body.dark .missao-gh p,
+body.dark .medalha-gh p,
+body.dark .titulo-conquistas-gh p,
+body.dark .xp-card-gh p {
+    color: #cbd5e1;
+}
+
+body.dark .missao-barra-gh {
+    background: #334155;
+}
+
+@media (max-width: 900px) {
+    .missoes-grid-gh,
+    .medalhas-grid-gh {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-conquistas-gh {
+        padding: 22px;
+    }
+
+    .nivel-gh {
+        grid-template-columns: 1fr;
+    }
+
+    .nivel-icone-gh {
+        width: 75px;
+        height: 75px;
+        font-size: 36px;
+    }
+
+    .resumo-xp-gh {
+        grid-template-columns: 1fr;
+    }
+
+    .missoes-grid-gh,
+    .medalhas-grid-gh {
+        grid-template-columns: 1fr;
+    }
+}

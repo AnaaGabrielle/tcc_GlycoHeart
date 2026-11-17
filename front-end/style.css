@@ -2018,3 +2018,141 @@ cat >> front-end/style.css <<'EOF'
         padding: 16px;
     }
 }
+
+.mascote-dashboard {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 20px;
+}
+
+.mascote-dashboard img {
+    width: 140px;
+    height: auto;
+    object-fit: contain;
+    animation: flutuar 3s ease-in-out infinite;
+}
+
+@keyframes flutuar {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+/* ==========================================
+   GLYCOHEART - CONTROLE DOS HEARTINHOS
+========================================== */
+
+/* Exibe somente a página ativa */
+.conteudo > section.pagina {
+    display: none !important;
+}
+
+.conteudo > section.pagina.ativa {
+    display: block !important;
+}
+
+/* Posicionamento dos mascotes */
+.mascote-dashboard,
+.mascote-pagina {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 15px auto 25px;
+    pointer-events: none;
+}
+
+/* Heartinho do dashboard */
+.mascote-dashboard img {
+    display: block;
+    width: 130px;
+    max-width: 40vw;
+    height: auto;
+    object-fit: contain;
+    animation: flutuarHeartinho 3s ease-in-out infinite;
+}
+
+/* Heartinhos das outras páginas */
+.mascote-pagina img {
+    display: block;
+    width: 110px;
+    max-width: 34vw;
+    height: auto;
+    object-fit: contain;
+    animation: flutuarHeartinho 3s ease-in-out infinite;
+}
+
+/* Animação */
+@keyframes flutuarHeartinho {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .mascote-dashboard img {
+        width: 110px;
+    }
+
+    .mascote-pagina img {
+        width: 90px;
+    }
+}
+/* Heartinho na análise educativa */
+.heartinho-analise-gh {
+    width: 190px;
+    height: 220px;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+    animation: flutuarHeartinho 3s ease-in-out infinite;
+}
+
+/* Área visual mais bonita */
+.corpo-visual-gh {
+    background: linear-gradient(
+        135deg,
+        #eff6ff,
+        #f5f3ff,
+        #fff1f5
+    );
+    border: 1px solid #e0e7ff;
+    border-radius: 24px;
+}
+
+/* Cartões educativos */
+.efeito-gh {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.efeito-gh:hover {
+    transform: translateY(-3px);
+}
+
+.efeito-gh h3 {
+    color: #17324f;
+    font-size: 17px;
+}
+
+.efeito-gh p {
+    line-height: 1.8;
+}
+
+@media (max-width: 600px) {
+    .heartinho-analise-gh {
+        width: 155px;
+        height: 185px;
+    }
+}

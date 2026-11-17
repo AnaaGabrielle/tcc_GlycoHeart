@@ -13,8 +13,8 @@
         }
     </script>
 
-    <link rel="stylesheet" href="style.css">
-
+     <link rel="stylesheet" type="text/css" href="./style.css">
+     <link rel="stylesheet" type="text/css" href="./conquistas.css">
     <style>
         .analise-grid-gh {
             display: grid;
@@ -192,6 +192,46 @@
             font-size: 14px;
         }
 
+
+        /* Heartinhos: mascotes de cada página */
+        .mascote-dashboard,
+        .mascote-pagina {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin: 4px auto 22px;
+            pointer-events: none;
+        }
+
+        .mascote-dashboard img {
+            display: block;
+            width: 142px;
+            max-width: 40vw;
+            height: auto;
+            object-fit: contain;
+            animation: flutuarHeartinho 3s ease-in-out infinite;
+        }
+
+        .mascote-pagina img {
+            display: block;
+            width: 112px;
+            max-width: 34vw;
+            height: auto;
+            object-fit: contain;
+            animation: flutuarHeartinho 3s ease-in-out infinite;
+        }
+
+        @keyframes flutuarHeartinho {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-9px); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .mascote-dashboard img,
+            .mascote-pagina img { animation: none; }
+        }
+
         @media (max-width: 900px) {
             .analise-grid-gh {
                 grid-template-columns: 1fr;
@@ -271,6 +311,10 @@
                 📊 <span>Relatórios</span>
             </button>
 
+           <button class="menu-btn" data-page="conquistas">
+               🏆 <span>Conquistas</span>
+            </button>
+
             <button class="menu-btn" data-page="perfil">
                 👤 <span>Meu perfil</span>
             </button>
@@ -309,7 +353,7 @@
         </header>
 
         <!-- DASHBOARD -->
-        <section id="inicio" class="pagina ativa">
+    <section id="inicio" class="pagina ativa">
 
             <div class="titulo-pagina">
                 <span class="tag">VISÃO GERAL</span>
@@ -408,6 +452,10 @@
         <!-- GLICEMIA -->
         <section id="glicemia" class="pagina">
 
+            <div class="mascote-pagina">
+                <img src="./img/heartinho-pensativo.png" alt="Heartinho pensativo" loading="lazy">
+            </div>
+
             <div class="titulo-pagina">
                 <span class="tag">GLICEMIA</span>
                 <h1>Registro de glicemia</h1>
@@ -467,6 +515,10 @@
         <!-- PRESSÃO -->
         <section id="pressao" class="pagina">
 
+            <div class="mascote-pagina">
+                <img src="./img/heartinho-medico.png" alt="Heartinho médico" loading="lazy">
+            </div>
+
             <div class="titulo-pagina">
                 <span class="tag">PRESSÃO</span>
                 <h1>Pressão arterial</h1>
@@ -520,6 +572,10 @@
 
         <!-- ALIMENTAÇÃO -->
         <section id="alimentacao" class="pagina">
+
+            <div class="mascote-pagina">
+                <img src="./img/heartinho-piscando.png" alt="Heartinho feliz" loading="lazy">
+            </div>
 
             <div class="titulo-pagina">
                 <span class="tag">ALIMENTAÇÃO</span>
@@ -575,6 +631,10 @@
         <!-- ANÁLISE EDUCATIVA -->
         <section id="analise" class="pagina">
 
+            <div class="mascote-pagina">
+                <img src="./img/heartinho-pensativo.png" alt="Heartinho pensativo" loading="lazy">
+            </div>
+
             <div class="titulo-pagina">
                 <span class="tag">ANÁLISE EDUCATIVA</span>
                 <h1>Entenda seu corpo</h1>
@@ -588,9 +648,12 @@
 
                 <div class="card corpo-card-gh">
 
-                    <div class="corpo-visual-gh">
-                        <div class="silhueta-gh">🧍</div>
-
+                  
+               <img
+        src="./img/heartinho-glycoheart.png"
+        alt="Heartinho do GlycoHeart"
+        class="heartinho-analise-gh"
+           >
                         <span class="ponto-gh ponto-coracao-gh">
                             ❤️ <small>Coração</small>
                         </span>
@@ -667,6 +730,10 @@
         <!-- CONSEQUÊNCIAS -->
       <!-- CONSEQUÊNCIAS -->
 <section id="consequencias" class="pagina">
+
+            <div class="mascote-pagina">
+                <img src="./img/heartinho-doentinho.png" alt="Heartinho" loading="lazy">
+            </div>
 
     <div class="titulo-pagina">
         <span class="tag">CONSEQUÊNCIAS EDUCATIVAS</span>
@@ -771,6 +838,10 @@
         <!-- MEDICAMENTOS -->
         <section id="medicamentos" class="pagina">
 
+            <div class="mascote-pagina">
+                <img src="./img/heartinho-medico.png" alt="Heartinho médico" loading="lazy">
+            </div>
+
             <div class="titulo-pagina">
                 <span class="tag">MEDICAMENTOS</span>
                 <h1>Meus medicamentos</h1>
@@ -824,6 +895,10 @@
         <!-- RELATÓRIOS -->
         <section id="relatorios" class="pagina">
 
+            <div class="mascote-pagina">
+                <img src="./img/heartinho-descolado.png" alt="Heartinho descolado" loading="lazy">
+            </div>
+
             <div class="titulo-pagina">
                 <span class="tag">RELATÓRIOS</span>
                 <h1>Resumo dos registros</h1>
@@ -873,8 +948,93 @@
             </div>
         </section>
 
+<!-- CONQUISTAS -->
+<section id="conquistas" class="pagina">
+
+    <div class="titulo-pagina">
+        <span class="tag">GAMIFICAÇÃO</span>
+        <h1>Minhas conquistas 🏆</h1>
+        <p>Continue acompanhando seus registros e desbloqueando medalhas!</p>
+    </div>
+
+    <div class="conquistas-gh">
+
+        <div class="hero-conquistas-gh">
+
+            <div class="nivel-gh">
+
+                <div class="nivel-icone-gh">🏆</div>
+
+                <div class="nivel-info-gh">
+                    <span>SEU NÍVEL ATUAL</span>
+                    <h2 id="nivelNomeGH">Explorador da Saúde</h2>
+
+                    <strong id="nivelNumeroGH">Nível 1</strong>
+
+                    <div class="xp-barra-gh">
+                        <div class="xp-progresso-gh"
+                             id="barraXP"></div>
+                    </div>
+
+                    <div class="xp-texto-gh" id="textoXP">
+                        0 / 100 XP para o próximo nível
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="resumo-xp-gh">
+
+            <div class="xp-card-gh">
+                <span>⭐</span>
+                <h3 id="totalXPGH">0</h3>
+                <p>Pontos de experiência</p>
+            </div>
+
+            <div class="xp-card-gh">
+                <span>🏅</span>
+                <h3 id="totalMedalhasGH">0</h3>
+                <p>Medalhas conquistadas</p>
+            </div>
+
+            <div class="xp-card-gh">
+                <span>📋</span>
+                <h3 id="totalRegistrosGH">0</h3>
+                <p>Registros realizados</p>
+            </div>
+
+        </div>
+
+        <div>
+            <div class="titulo-conquistas-gh">
+                <h2>🎯 Suas missões</h2>
+                <p>Acompanhe seu progresso em cada atividade.</p>
+            </div>
+
+            <div class="missoes-grid-gh" id="listaMissoesGH"></div>
+        </div>
+
+        <div>
+            <div class="titulo-conquistas-gh">
+                <h2>🏆 Coleção de medalhas</h2>
+                <p>Desbloqueie conquistas utilizando o GlycoHeart.</p>
+            </div>
+
+            <div class="medalhas-grid-gh" id="listaMedalhasGH"></div>
+        </div>
+
+    </div>
+
+</section>
+
         <!-- PERFIL -->
         <section id="perfil" class="pagina">
+
+            <div class="mascote-pagina">
+                <img src="./img/heartinho-carinhoso.png" alt="Heartinho carinhoso" loading="lazy">
+            </div>
 
             <div class="titulo-pagina">
                 <span class="tag">PERFIL</span>
